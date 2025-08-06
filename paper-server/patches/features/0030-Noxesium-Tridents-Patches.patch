@@ -1,0 +1,60 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Dofs <157043656+dofsdev@users.noreply.github.com>
+Date: Wed, 6 Aug 2025 01:58:13 +0100
+Subject: [PATCH] Noxesium Tridents Patches
+
+
+diff --git a/net/minecraft/world/entity/LivingEntity.java b/net/minecraft/world/entity/LivingEntity.java
+index 3e8f4f3c3d43c6875108295187023c48eece2788..9750e39a2ad8253a083637b34919969ec45256f5 100644
+--- a/net/minecraft/world/entity/LivingEntity.java
++++ b/net/minecraft/world/entity/LivingEntity.java
+@@ -3642,7 +3642,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+     protected void checkAutoSpinAttack(AABB boundingBoxBeforeSpin, AABB boundingBoxAfterSpin) {
+         AABB aabb = boundingBoxBeforeSpin.minmax(boundingBoxAfterSpin);
+         List<Entity> entities = this.level().getEntities(this, aabb);
+-        if (!entities.isEmpty()) {
++        if (!entities.isEmpty() && !isUsingClientsideTrident()) { // Noxesium - disable spin attacks if using client tridents
+             for (Entity entity : entities) {
+                 if (entity instanceof LivingEntity) {
+                     this.doAutoAttackOnTouch((LivingEntity)entity);
+@@ -3662,6 +3662,18 @@ public abstract class LivingEntity extends Entity implements Attackable {
+         }
+     }
+ 
++    // Noxesium start
++    private boolean useClientTrident = false;
++
++    public void setUseClientsideTrident(boolean useClientTrident) {
++        this.useClientTrident = useClientTrident;
++    }
++
++    public boolean isUsingClientsideTrident() {
++        return useClientTrident;
++    }
++    // Noxesium end
++
+     protected void doPush(Entity entity) {
+         entity.push(this);
+     }
+diff --git a/net/minecraft/world/item/TridentItem.java b/net/minecraft/world/item/TridentItem.java
+index df629e3f2defce5e65aaf874d7c5ddff71f39c28..2ac4eb91c3e1f519b270863e24129205e486d088 100644
+--- a/net/minecraft/world/item/TridentItem.java
++++ b/net/minecraft/world/item/TridentItem.java
+@@ -115,7 +115,7 @@ public class TridentItem extends Item implements ProjectileItem {
+                         }
+                     }
+ 
+-                    if (tridentSpinAttackStrength > 0.0F) {
++                    if (tridentSpinAttackStrength > 0.0F && !player.isUsingClientsideTrident()) { // Noxesium - disable if using client-side trident
+                         float yRot = player.getYRot();
+                         float xRot = player.getXRot();
+                         float f = -Mth.sin(yRot * (float) (Math.PI / 180.0)) * Mth.cos(xRot * (float) (Math.PI / 180.0));
+@@ -150,7 +150,7 @@ public class TridentItem extends Item implements ProjectileItem {
+         ItemStack itemInHand = player.getItemInHand(hand);
+         if (itemInHand.nextDamageWillBreak()) {
+             return InteractionResult.FAIL;
+-        } else if (EnchantmentHelper.getTridentSpinAttackStrength(itemInHand, player) > 0.0F && !player.isInWaterOrRain()) {
++        } else if (EnchantmentHelper.getTridentSpinAttackStrength(itemInHand, player) > 0.0F) {
+             return InteractionResult.FAIL;
+         } else {
+             player.startUsingItem(hand);
