@@ -1456,6 +1456,28 @@ public interface LivingEntity extends Attributable, Damageable, ProjectileSource
     boolean canUseEquipmentSlot(org.bukkit.inventory.@NotNull EquipmentSlot slot);
     // Paper end - Expose canUseSlot
 
+    // Noxesium start
+    /**
+     * Returns whether this entity is using a client-side implementation of the
+     * riptide trident mechanics, provided by Noxesium.
+     *
+     * It is assumed the necessary server rule is set in Noxesium separately.
+     * Issues are expected if this is true without Noxesium being set up properly.
+     *
+     * @return whether this entity uses the client-side trident
+     */
+    boolean isUsingClientsideTrident();
+
+    /**
+     * Sets whether this entity is using a client-side implementation of the
+     * riptide trident mechanics, provided by Noxesium.
+     *
+     * @param useClientTrident whether this entity uses the client-side trident
+     */
+    void setUseClientsideTrident(boolean useClientTrident);
+    // Noxesium end
+
+
     /**
      * Gets the entity's combat tracker
      *
