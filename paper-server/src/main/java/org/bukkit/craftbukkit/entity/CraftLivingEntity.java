@@ -1163,6 +1163,18 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
         return this.getHandle().canUseSlot(org.bukkit.craftbukkit.CraftEquipmentSlot.getNMS(slot));
     }
 
+    // Noxesium start
+    @Override
+    public boolean isUsingClientsideTrident() {
+        return getHandle().isUsingClientsideTrident();
+    }
+
+    @Override
+    public void setUseClientsideTrident(boolean useClientTrident) {
+        getHandle().setUseClientsideTrident(useClientTrident);
+    }
+    // Noxesium end
+
     @Override
     public CombatTracker getCombatTracker() {
         return this.getHandle().getCombatTracker().paperCombatTracker;
