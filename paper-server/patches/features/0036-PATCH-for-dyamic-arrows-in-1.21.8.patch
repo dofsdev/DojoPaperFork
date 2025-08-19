@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Dofs <157043656+dofsdev@users.noreply.github.com>
+Date: Tue, 19 Aug 2025 23:54:54 +0100
+Subject: [PATCH] PATCH for dyamic arrows in 1.21.8
+
+
+diff --git a/net/minecraft/world/entity/projectile/ProjectileUtil.java b/net/minecraft/world/entity/projectile/ProjectileUtil.java
+index 86203733328f664bbe56279c7e0cb227247164b3..dfe8ad52b57824a51325784cbb793caba787aeb5 100644
+--- a/net/minecraft/world/entity/projectile/ProjectileUtil.java
++++ b/net/minecraft/world/entity/projectile/ProjectileUtil.java
+@@ -104,7 +104,7 @@ public final class ProjectileUtil {
+     }
+ 
+     public static float computeMargin(Entity entity) {
+-        return Math.max(0.0F, Math.min(0.3F, (entity.tickCount - 2) / 20.0F));
++        return 0.3F; //Reverted the dynamic projectile change in 1.21.6
+     }
+ 
+     @Nullable
